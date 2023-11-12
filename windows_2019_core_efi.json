@@ -178,12 +178,9 @@
     },
     {
       "type": "powershell",
-      "elevated_user": "vagrant",
-      "elevated_password": "vagrant",
       "scripts":
       [
-        "./scripts/install-chocolatey.ps1",
-        "./scripts/install-openssh.ps1",
+        "./scripts/install-chocolatey.ps1",        
         "./scripts/install-7zip.ps1"
       ]
     },
@@ -216,6 +213,7 @@
       "elevated_password": "vagrant",
       "scripts":
       [
+        "./scripts/install-openssh.ps1",
         "./scripts/install-server-core-app-compatibility.ps1"
       ]
     },
