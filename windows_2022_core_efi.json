@@ -1,0 +1,266 @@
+{
+  "builders": [
+    {
+      "accelerator": "kvm",
+      "boot_wait": "6s",
+      "boot_command": [ "{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}",
+                        "{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}",
+                        "{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}{{user `boot_keypress`}}" ],
+      "communicator": "winrm",
+      "cpus": 4,
+      "cpu_model": "qemu64",
+      "disk_size": "{{user `disk_size`}}",
+      "efi_boot": true,
+      "efi_firmware_code": "/usr/share/OVMF/OVMF_CODE.fd",
+      "efi_firmware_vars": "/usr/share/OVMF/OVMF_VARS.fd",
+      "format": "qcow2",
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "./scripts/disable-screensaver.ps1",
+        "./scripts/disable-winrm.ps1",
+        "./scripts/enable-winrm.ps1",
+        "./scripts/microsoft-updates.bat",
+        "./scripts/win-updates.ps1"
+      ],
+      "headless": true,
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "memory": "{{user `memory`}}",
+      "output_directory": "win-2022-core-efi-qemu",
+      "qemuargs": [
+        [
+          "-boot",
+          "menu=on"
+        ],
+        [ "-bios", "/usr/share/OVMF/OVMF_CODE.fd" ],
+        [
+          "-drive",
+          "file=win-2022-core-efi-qemu/{{ .Name }},if=none,id=drive-hd1,cache=writeback,discard=ignore,format=qcow2"
+        ],
+        [
+          "-drive",
+          "file={{ user `iso_url` }},media=cdrom,id=drive-cd1,format=raw,if=none,readonly=on"
+        ],
+        [
+          "-drive",
+          "file={{ user `virtio_win_iso` }},media=cdrom,id=drive-cd2,format=raw,if=none,readonly=on"
+        ],
+        [
+          "-device",
+          "ahci,id=achi0"
+        ],
+        [
+          "-device",
+          "virtio-blk-pci,drive=drive-hd1,id=hd1,bootindex=2"
+        ],
+        [
+          "-device",
+          "ide-cd,bus=achi0.0,drive=drive-cd1,id=cd1,bootindex=1"
+        ],
+        [
+          "-device",
+          "ide-cd,bus=achi0.1,drive=drive-cd2,id=cd2,bootindex=3"
+        ]
+      ],
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "type": "qemu",
+      "vm_name": "win-2022-core-efi",
+      "vnc_bind_address": "0.0.0.0",
+      "vtpm": true,
+      "winrm_password": "vagrant",
+      "winrm_timeout": "{{user `winrm_timeout`}}",
+      "winrm_username": "vagrant"
+    },
+    {
+      "boot_wait": "0s",
+      "communicator": "winrm",
+      "configuration_version": "8.0",
+      "cpus": 2,
+      "disk_size": "{{user `disk_size`}}",
+      "enable_secure_boot": true,
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "./scripts/disable-screensaver.ps1",
+        "./scripts/disable-winrm.ps1",
+        "./scripts/enable-winrm.ps1",
+        "./scripts/microsoft-updates.bat",
+        "./scripts/win-updates.ps1"
+      ],
+      "guest_additions_mode": "disable",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "memory": "{{user `memory`}}",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "switch_name": "{{user `hyperv_switchname`}}",
+      "type": "hyperv-iso",
+      "vm_name": "WindowsServer2022Core",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "{{user `winrm_timeout`}}",
+      "winrm_username": "vagrant"
+    },
+    {
+      "boot_wait": "2m",
+      "communicator": "winrm",
+      "cpus": 2,
+      "disk_adapter_type": "lsisas1068",
+      "disk_size": "{{user `disk_size`}}",
+      "disk_type_id": "{{user `disk_type_id`}}",
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "./scripts/disable-screensaver.ps1",
+        "./scripts/disable-winrm.ps1",
+        "./scripts/enable-winrm.ps1",
+        "./scripts/microsoft-updates.bat",
+        "./scripts/win-updates.ps1"
+      ],
+      "guest_os_type": "windows9srv-64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "memory": "{{user `memory`}}",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "type": "vmware-iso",
+      "vmx_data": {
+        "RemoteDisplay.vnc.enabled": "false",
+        "RemoteDisplay.vnc.port": "5900"
+      },
+      "vmx_remove_ethernet_interfaces": true,
+      "vnc_port_max": 5980,
+      "vnc_port_min": 5900,
+      "winrm_password": "vagrant",
+      "winrm_timeout": "{{user `winrm_timeout`}}",
+      "winrm_username": "vagrant"
+    },
+    {
+      "boot_wait": "2m",
+      "communicator": "winrm",
+      "cpus": 2,
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "./scripts/disable-screensaver.ps1",
+        "./scripts/disable-winrm.ps1",
+        "./scripts/enable-winrm.ps1",
+        "./scripts/microsoft-updates.bat",
+        "./scripts/win-updates.ps1"
+      ],
+      "guest_additions_mode": "disable",
+      "guest_os_type": "Windows2016_64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "memory": "{{user `memory`}}",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "type": "virtualbox-iso",
+      "winrm_password": "vagrant",
+      "winrm_timeout": "{{user `winrm_timeout`}}",
+      "winrm_username": "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "scripts": [
+        "./scripts/enable-rdp.bat"
+      ],
+      "type": "windows-shell"
+    },
+    {
+      "type": "powershell",
+      "inline":
+      [
+        "$ErrorActionPreference = 'stop'",
+        "# Install Chocolatey package manager",
+        "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
+        "Write-Output 'Chocolatey installed successfully!'"
+      ]
+    },
+    {
+      "type": "powershell",
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant",
+      "inline":
+      [
+        "$ErrorActionPreference = 'stop'",
+        "# Install OpenSSH Server",
+        "Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0",
+        "Set-Service -Name sshd -StartupType Automatic",
+        "Write-Output 'OpenSSH server installed successfully!'"
+      ]
+    },
+    {
+      "type": "powershell",
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant",
+      "inline":
+      [
+        "$ErrorActionPreference = 'stop'",
+        "# Install Windows Server Core App Compatibility Features",
+        "Add-WindowsCapability -Online -Name ServerCore.AppCompatibility~~~~0.0.1.0",
+        "Write-Output ' Windows Server Core App Compatibility Features installed successfully!'"
+      ]
+    },
+    {
+      "type": "powershell",
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant",
+      "inline":
+      [
+        "$ErrorActionPreference = 'stop'",
+        "# Install 7zip module",
+        "Try {",
+        "  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
+        "  Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force",
+        "  Set-PSRepository -Name 'PSGallery' -SourceLocation 'https://www.powershellgallery.com/api/v2' -InstallationPolicy Trusted",
+        "  Install-Module -Name 7Zip4PowerShell -Force",
+        "  Write-Output 'Installed 7-Zip Powershell Module'",
+        "}",
+        "Catch {",
+        "  Write-Output 'Unable to install 7-Zip Powershell Module'",
+        "}"
+      ]
+    },
+    {
+      "type": "powershell",
+      "scripts":
+      [
+        "./scripts/install-spice-guest-tools.ps1"
+      ]
+    },
+    {
+      "type": "windows-restart",
+      "restart_check_command": "powershell -c \"& {Write-Output 'restarted.'}\""
+    },
+    {
+      "scripts": [
+        "./scripts/vm-guest-tools.ps1",
+        "./scripts/debloat-windows.ps1"
+      ],
+      "type": "powershell"
+    },
+    {
+      "scripts": [
+        "./scripts/set-winrm-automatic.bat",
+        "./scripts/uac-enable.bat",
+        "./scripts/compile-dotnet-assemblies.bat",
+        "./scripts/dis-updates.bat",
+        "./scripts/compact.bat"
+      ],
+      "type": "windows-shell"
+    }
+  ],
+  "variables": {
+    "autounattend": "./answer_files/2022_core_efi/Autounattend.xml",
+    "disk_size": "61440",
+    "disk_type_id": "1",
+    "memory": "4096",
+    "headless": "false",
+    "iso_checksum": "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325",
+    "iso_url": "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso",
+    "manually_download_iso_from": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2022",
+    "winrm_timeout": "6h",
+    "virtio_win_iso": "./virtio-win.iso",
+    "boot_keypress": "<enter><wait><wait><wait>"
+  }
+}
+
+

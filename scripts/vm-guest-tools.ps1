@@ -6,6 +6,22 @@ if (!(Test-Path "C:\Windows\Temp\7z1900-x64.msi")) {
 }
 cmd /c msiexec /qb /i C:\Windows\Temp\7z1900-x64.msi
 
+if ("$env:PACKER_BUILDER_TYPE" -eq "qemu") {
+
+  Write-Output "Using QEMU"
+  # Install QEMU Agent
+  if (Test-Path "E:\guest-agent\qemu-ga-X86_64.msi") {
+    Try {
+     Start-Process -FilePath msiexec -ArgumentList '/i E:\guest-agent\qemu-ga-X86_64.msi /qn /norestart' -NoNewWindow -Wait -ErrorAction Stop
+     Write-Output "QEMU Agent installed successfully!"
+    }
+    Catch {
+     Write-Output "Unable to install QEMU Agent. Error: "
+     Write-Output $_.Exception.Message
+    }
+  }
+}
+
 if ("$env:PACKER_BUILDER_TYPE" -eq "vmware-iso") {
 
   Write-Output "Using VMware"
