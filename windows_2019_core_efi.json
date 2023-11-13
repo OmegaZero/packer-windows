@@ -169,18 +169,7 @@
       "scripts":
       [
         "./scripts/install-net4_8.ps1",
-        "./scripts/install-spice-guest-tools.ps1"
-      ]
-    },
-    {
-      "type": "windows-restart",
-      "restart_check_command": "powershell -c \"& {Write-Output 'restarted.'}\""
-    },
-    {
-      "type": "powershell",
-      "scripts":
-      [
-        "./scripts/install-chocolatey.ps1",        
+        "./scripts/install-spice-guest-tools.ps1",
         "./scripts/install-7zip.ps1"
       ]
     },
@@ -190,6 +179,7 @@
     },
     {
       "scripts": [
+        "./scripts/install-chocolatey.ps1",
         "./scripts/vm-guest-tools.ps1",
         "./scripts/debloat-windows.ps1"
       ],
@@ -213,8 +203,8 @@
       "elevated_password": "vagrant",
       "scripts":
       [
-        "./scripts/install-openssh.ps1",
-        "./scripts/install-server-core-app-compatibility.ps1"
+        "./scripts/install-server-core-app-compatibility.ps1",
+        "./scripts/install-openssh.ps1"        
       ]
     },
     {
